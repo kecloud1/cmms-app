@@ -31,8 +31,24 @@ app.get('/api/assets', (req, res) => {
     res.json(assets);
 });
 
+app.post('/api/assets', (req, res) => {
+  const { name, category, status } = req.body;
 
+  if (!name || !category || !status) {
+    res.status(400).json({ error: 'name, category, and status are required' });
+    return;
+  }
 
+  const newAsset: Asset = {
+    id: assets.length + 1,
+    name,
+    category,
+    status,
+  };
+
+  assets.push(newAsset);
+  res.status(201).json(newAsset);
+});
 
 
 
