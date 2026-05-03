@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Asset } from "./types";
+import.meta.env.VITE_API_URL;
 
 interface Props {
   assets: Asset[];
@@ -10,7 +11,7 @@ function AssetList({ assets, onAssetsLoaded }: Props) {
   useEffect(() => {
     async function loadAssets() {
       try {
-        const res = await fetch("http://localhost:3000/api/assets");
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/assets`);
         const data: Asset[] = await res.json();
         onAssetsLoaded(data);
       } catch (err) {

@@ -14,7 +14,7 @@ function AddAssetForm({ onAssetAdded }: Props) {
     setError(null);
 
     try {
-      const res = await fetch("http://localhost:3000/api/assets", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/assets`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
