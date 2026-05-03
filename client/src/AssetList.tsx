@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import type { Asset } from "./types";
 import.meta.env.VITE_API_URL;
 
