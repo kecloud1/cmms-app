@@ -97,10 +97,10 @@ sudo -u postgres psql
 ```
 
 ```sql
-CREATE USER cmms_user WITH PASSWORD 'cmms_password';
-CREATE DATABASE cmms_db OWNER cmms_user;
-GRANT ALL PRIVILEGES ON DATABASE cmms_db TO cmms_user;
-ALTER USER cmms_user CREATEDB;
+CREATE USER your_db_user WITH PASSWORD 'your_db_password';
+CREATE DATABASE cmms_db OWNER your_db_user;
+GRANT ALL PRIVILEGES ON DATABASE cmms_db TO your_db_user;
+ALTER USER your_db_user CREATEDB;
 \q
 ```
 
@@ -109,7 +109,7 @@ ALTER USER cmms_user CREATEDB;
 Create a `.env` file in the `server` folder:
 
 ```
-DATABASE_URL="postgresql://cmms_user:cmms_password@localhost:5432/cmms_db"
+DATABASE_URL="postgresql://your_db_user:your_db_password@localhost:5432/cmms_db"
 ```
 
 Create a `.env` file in the `client` folder:
