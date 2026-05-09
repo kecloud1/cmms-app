@@ -11,10 +11,14 @@ function App() {
   }
 
   return (
-    <div>
-      <h1>CMMS</h1>
-      <AddAssetForm onAssetAdded={handleAssetAdded} />
-      <AssetList assets={assets} onAssetsLoaded={setAssets} />
+    <div className="min-h-screen bg-gray-100 p-8">
+      <header className="bg-white border-b border-gray-200 px-8 py-4">
+        <h1 className="text-2xl font-bold text-gray-900">CMMS</h1>
+      </header>
+      <main className="max-w-4xl mx-auto px-8 py-8 space-y-8">
+        <AddAssetForm onAssetAdded={handleAssetAdded} />
+        <AssetList assets={assets} onAssetsLoaded={setAssets} />
+      </main>
     </div>
   );
 }
