@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import type { Asset } from "./types";
 import.meta.env.VITE_API_URL;
 
@@ -8,6 +8,8 @@ interface Props {
 }
 
 function AssetList({ assets, onAssetsLoaded }: Props) {
+  const [deletingId, setDeletingId] = useState<number | null>(null);
+
   useEffect(() => {
     async function loadAssets() {
       try {
@@ -21,6 +23,26 @@ function AssetList({ assets, onAssetsLoaded }: Props) {
 
     loadAssets();
   }, []);
+
+  async function handleDelete(id: number) {
+    setDeletingId(id);
+
+    try {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/assets/${id}`, {
+        method: "DELETE",
+      });
+
+      // Remove the deleted asset from state without a network request
+      onAssetsLoaded(assets.filter((asset) => asset.id !== id));
+    } catch (err) {
+      console.error("Failed to delete asset", err);
+    } finally {
+      setDeletingId(null);
+    }
+  }
+
+  if (assets.length === 0)
+    return <p className="text-gray-500 text-sm">No assets found.</p>;
 
   if (assets.length === 0)
     return <p className="text-gray-500 text-sm">No assets found.</p>;
@@ -37,20 +59,31 @@ function AssetList({ assets, onAssetsLoaded }: Props) {
             className="px-6 py-4 flex items-center justify-between"
           >
             <div>
-              <p className="text-sm font-medium text-gray-900">{asset.name}</p>
-              <p className="text-sm text-gray-500">{asset.category}</p>
+              <div className="flex items-center gap-4">
+                <p className="text-sm font-medium text-gray-900">
+                  {asset.name}
+                </p>
+                <p className="text-sm text-gray-500">{asset.category}</p>
+              </div>
+              <span
+                className={`text-xs font-medium px-2 py-1 rounded-full ${
+                  asset.status === "operational"
+                    ? "bg-green-100 text-green-700"
+                    : asset.status === "maintenance"
+                      ? "bg-yellow-100 text-yellow-700"
+                      : "bg-red-100 text-red-700"
+                }`}
+              >
+                {asset.status}
+              </span>
+              <button
+                onClick={() => handleDelete(asset.id)}
+                disabled={deletingId === asset.id}
+                className="text-sm text-red-600 hover:text-red-800 disabled:opacity-50"
+              >
+                {deletingId === asset.id ? "Deleting..." : "Delete"}
+              </button>
             </div>
-            <span
-              className={`text-xs font-medium px-2 py-1 rounded-full ${
-                asset.status === "operational"
-                  ? "bg-green-100 text-green-700"
-                  : asset.status === "maintenance"
-                    ? "bg-yellow-100 text-yellow-700"
-                    : "bg-red-100 text-red-700"
-              }`}
-            >
-              {asset.status}
-            </span>
           </li>
         ))}
       </ul>
